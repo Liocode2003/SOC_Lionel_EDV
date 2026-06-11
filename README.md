@@ -206,9 +206,6 @@ enum4linux -a 192.168.152.131
 Ingénieur de Conception — Génie des Systèmes Numériques  
 ISGE-BF | Année universitaire 2025–2026
 
-- Professeur de suivi : **S/LTN GNAKINI Alane Chamir**
-- Maître de stage : **M. TRAORE Alpha**
-- Entreprise : **Endeavour Mining**
 
 ---
 
