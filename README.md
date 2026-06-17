@@ -2,13 +2,13 @@
 
 <div align="center">
 
-![SOC](https://img.shields.io/badge/SOC-Endeavour%20Mining-gold?style=for-the-badge&logo=shield&logoColor=white)
-![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20LTS-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![SOC](https://img.shields.io/badge/SOC-Endeavour%20Mining-gold?style=for-the-badge\&logo=shield\&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20LTS-E95420?style=for-the-badge\&logo=ubuntu\&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
 ![Wazuh](https://img.shields.io/badge/Wazuh-4.9.0-00bcd4?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**Conception et implémentation d'un Security Operations Center (SOC)**  
+**Conception et implémentation d’un Security Operations Center (SOC)**
 *Projet de fin de cycle — ISGE-BF | Endeavour Mining | 2025–2026*
 
 **NADZIGA Franck Lionel Elvis Kiswendsida**
@@ -19,206 +19,199 @@
 
 ## 📋 Description
 
-Ce dépôt contient le script de déploiement automatisé complet du SOC Endeavour Mining.  
-**Un seul script bash installe, déploie et intègre l'ensemble de la stack SOC** sur une VM Ubuntu 24.04 LTS — sans intervention manuelle.
+Ce dépôt présente le script de déploiement automatisé du SOC Endeavour Mining.
+Il permet d’installer et de préparer une stack SOC complète sur une machine Ubuntu 24.04 LTS à l’aide de Docker, Docker Compose et de services système.
 
-### Ce que fait le script
-
-```
-Ubuntu 24.04 LTS (vierge)
-        │
-        ▼
-sudo ./deploy_soc.sh
-        │
-        ▼
-┌─────────────────────────────────────────┐
-│          SOC OPÉRATIONNEL               │
-│                                         │
-│  Wazuh SIEM/XDR    ──► TheHive          │
-│  Suricata IDS/IPS  ──► Shuffle SOAR     │
-│  OpenVAS Scanner   ──► MISP TI          │
-│  Tenzir Pipeline   ──► Cortex Analyzer  │
-└─────────────────────────────────────────┘
-```
+Le script automatise le déploiement initial des principales composantes du SOC et prépare les intégrations entre les outils. Certaines opérations complémentaires, notamment la création des clés API, l’activation des feeds MISP, la configuration des analyseurs Cortex, la création des workflows Shuffle et l’enrôlement des agents Windows, sont finalisées depuis les interfaces d’administration.
 
 ---
 
 ## 🧰 Stack déployée
 
-| Outil | Version | Rôle |
-|-------|---------|------|
-| **Wazuh** | 4.9.0 | SIEM / XDR — Cœur du SOC |
-| **TheHive** | 4.1.24 | Case Management |
-| **Cortex** | 3.1.8 | Analyse observables (VirusTotal, AbuseIPDB) |
-| **MISP** | Latest | Threat Intelligence Platform |
-| **Shuffle** | Latest | SOAR — Automatisation des réponses |
-| **Suricata** | Latest | IDS/IPS réseau |
-| **OpenVAS/Greenbone** | Latest | Scanner de vulnérabilités |
-| **Tenzir** | Latest | Pipeline Suricata → Wazuh |
+| Outil                 |            Version | Rôle                                               |
+| --------------------- | -----------------: | -------------------------------------------------- |
+| **Wazuh**             |              4.9.0 | SIEM / XDR — supervision, corrélation et détection |
+| **Wazuh Indexer**     | OpenSearch intégré | Stockage et indexation des événements              |
+| **Wazuh Dashboard**   |              4.9.0 | Interface de visualisation                         |
+| **TheHive**           |                5.2 | Gestion des alertes et des incidents               |
+| **Cortex**            |              3.1.8 | Analyse et enrichissement des observables          |
+| **MISP**              |             Latest | Threat Intelligence Platform                       |
+| **Shuffle**           |             Latest | SOAR — automatisation des réponses                 |
+| **Suricata**          |             Latest | IDS/IPS réseau                                     |
+| **Tenzir**            |             Latest | Pipeline de transformation et normalisation        |
+| **Greenbone/OpenVAS** |             Latest | Scanner de vulnérabilités                          |
 
 ---
 
-## ⚡ Installation en une commande
+## ⚡ Installation
 
 ### Prérequis
 
-- Ubuntu 24.04 LTS (serveur ou VM)
-- Minimum **8 Go RAM**, 4 vCPUs, 50 Go disque
-- Accès Internet
-- Droits root (sudo)
+* Ubuntu 24.04 LTS
+* Minimum recommandé : **12 à 16 Go RAM**, 4 vCPU, 80 à 100 Go disque
+* Accès Internet
+* Droits root ou sudo
 
 ### Déploiement
 
 ```bash
-# 1. Cloner le dépôt
 git clone https://github.com/Liocode2003/SOC_Lionel_EDV.git
 cd SOC_Lionel_EDV
 
-# 2. Rendre le script exécutable
 chmod +x deploy_soc.sh
-
-# 3. Lancer le déploiement (en root)
 sudo ./deploy_soc.sh
 ```
 
-> ⏱️ **Durée estimée : 15 à 30 minutes** selon la connexion Internet
+> Le temps de déploiement dépend de la connexion Internet et du démarrage des services lourds comme Wazuh, MISP et Greenbone/OpenVAS.
 
 ---
 
 ## 🌐 Accès aux interfaces
 
-Une fois le déploiement terminé, les interfaces sont accessibles depuis :
+Après le déploiement, les interfaces sont accessibles depuis l’adresse IP de la machine hôte :
 
-| Interface | URL | Identifiants |
-|-----------|-----|-------------|
-| **Wazuh Dashboard** | `https://<IP>:443` | `admin` / `MyS3cr37P450r.*-` |
-| **TheHive** | `http://<IP>:9000` | `soc@soc.local` / `SOC@Endeavour2025!` |
-| **Cortex** | `http://<IP>:9001` | `analyst@soc.local` / `SOC@Endeavour2025!` |
-| **MISP** | `https://<IP>:8443` | `admin@admin.test` / `SOC@Endeavour2025!` |
-| **Shuffle** | `http://<IP>:3001` | `admin@soc.local` / `SOC@Endeavour2025!` |
-| **OpenVAS** | `https://<IP>:9392` | `admin` / `Admin@GVM2025` |
+| Interface             | URL                 |
+| --------------------- | ------------------- |
+| **Wazuh Dashboard**   | `https://<IP>:443`  |
+| **TheHive**           | `http://<IP>:9000`  |
+| **Cortex**            | `http://<IP>:9001`  |
+| **MISP**              | `https://<IP>:8443` |
+| **Shuffle**           | `http://<IP>:3001`  |
+| **Greenbone/OpenVAS** | `https://<IP>:9392` |
 
----
+Les identifiants d’accès sont stockés localement sur la machine de déploiement dans le fichier :
 
-## 🔗 Intégrations automatiques
-
-Le script configure **6 intégrations** entre les outils :
-
-```
-Wazuh ──────────────► TheHive       (alert-forwarder.py, toutes les minutes)
-Wazuh ──────────────► Shuffle       (webhook, alertes niveau ≥ 7)
-Wazuh ──────────────► MISP          (custom-misp, alertes niveau ≥ 10)
-TheHive ────────────► Cortex        (analyse observables automatique)
-MISP ───────────────► TheHive       (sync IOCs, toutes les 5 minutes)
-Suricata ───────────► Wazuh         (via Tenzir pipeline, temps réel)
+```bash
+/opt/soc/credentials.txt
 ```
 
 ---
 
-## 📁 Structure du dépôt
+## 🔗 Intégrations prévues
 
+Le SOC repose sur les intégrations suivantes :
+
+```text
+Agents Wazuh Windows ─────────► Wazuh
+Suricata ─────────► Tenzir ─────────► Wazuh
+OpenVAS/Greenbone ────────────► Wazuh
+
+Wazuh ─────────────► TheHive
+Wazuh ─────────────► Shuffle
+TheHive ◄──────────► Cortex
+MISP ──────────────► TheHive
 ```
-SOC_Lionel_EDV/
-├── deploy_soc.sh          # Script de déploiement principal
-├── README.md              # Ce fichier
-└── docs/
-    ├── architecture.md    # Description de l'architecture
-    └── tests.md           # Procédures de test et validation
-```
+
+Les intégrations reposent sur des scripts Python, des webhooks, des API REST et des services systemd. Les clés API doivent être validées ou créées depuis les interfaces des outils concernés.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture logique
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
-│            Couche 1 — Sources                        │
-│   Kali Linux  |  WinServer DC01  |  WinServer FS    │
+│ Couche 1 — Sources                                  │
+│ Serveur DC/DNS | Serveur File/Odoo | Kali Linux     │
 └──────────────────────┬──────────────────────────────┘
-                       │ logs agents / trafic réseau
-┌──────────────────────▼──────────────────────────────┐
-│            Couche 2 — Détection réseau               │
-│        Suricata + Tenzir  |  OpenVAS                 │
+                       │ Trafic réseau
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│ Couche 2 — Détection & Collecte                     │
+│ Suricata ─────────► Tenzir                          │
+│ OpenVAS/Greenbone ───────────────► Wazuh            │
 └──────────────────────┬──────────────────────────────┘
-                       │ alertes normalisées
-┌──────────────────────▼──────────────────────────────┐
-│            Couche 3 — SIEM                           │
-│              Wazuh v4.9.0 (SIEM/XDR)                │
-└──┬──────────┬──────────┬──────────┬─────────────────┘
-   │          │          │          │
-   ▼          ▼          ▼          ▼
-TheHive    Shuffle     MISP    OpenSearch ML
-Cortex     (SOAR)     (TI)    (Anomalies)
+                       │ Événements normalisés
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│ Couche 3 — SIEM / XDR                               │
+│ Wazuh Manager + Wazuh Indexer + Dashboard           │
+└──────────────────────┬──────────────────────────────┘
+                       │ Alertes corrélées
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│ Couche 4 — Outils SOC                               │
+│ TheHive | Cortex | MISP | Shuffle                   │
+└─────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## 🛡️ Conformité normative
 
-| Norme | Couverture |
-|-------|-----------|
-| **NIST CSF** | 5/5 fonctions (Identify, Protect, Detect, Respond, Recover) |
-| **MITRE ATT&CK** | 7 tactiques mappées |
-| **ISO 27001** | Contrôles A.12, A.13, A.16, A.17 |
-| **CIS Controls v8** | 9 contrôles implémentés |
-| **EBIOS RM** | 5 étapes couvertes |
+Le SOC est aligné avec plusieurs référentiels de cybersécurité :
 
----
-
-## 📊 Résultats obtenus
-
-| Métrique | Valeur |
-|----------|--------|
-| Alertes Wazuh générées | **4 303+** |
-| Cases TheHive créés | **3 151+** |
-| Events MISP | **185+** (10 feeds actifs) |
-| Exécutions Shuffle | **100+** |
-| Analyzers Cortex | **3** (VirusTotal x2 + AbuseIPDB) |
-| Économie vs solutions commerciales | **~50 000 €/an** |
+| Référentiel         | Couverture                                                                     |
+| ------------------- | ------------------------------------------------------------------------------ |
+| **NIST CSF**        | Identify, Protect, Detect, Respond, Recover                                    |
+| **MITRE ATT&CK**    | Classification des alertes selon les tactiques et techniques                   |
+| **ISO 27001**       | Journalisation, surveillance, gestion des vulnérabilités et incidents          |
+| **CIS Controls v8** | Inventaire, surveillance réseau, gestion des journaux et réponse aux incidents |
+| **EBIOS RM**        | Analyse des risques et validation de scénarios opérationnels                   |
 
 ---
 
 ## 🧪 Tests de validation
 
-Les tests suivants ont été réalisés depuis Kali Linux :
+Les tests réalisés depuis Kali Linux permettent de valider la chaîne de détection :
 
 ```bash
-# Test 1 — Reconnaissance réseau (MITRE T1046)
+# Reconnaissance réseau — MITRE T1046
 nmap -sV -sC -O -p- 192.168.152.131
 
-# Test 2 — Brute Force SMB (MITRE T1110)
+# Brute force SMB — MITRE T1110
 hydra -l administrator -P /usr/share/wordlists/rockyou.txt -t 1 smb://192.168.152.131
 
-# Test 3 — Énumération Active Directory (MITRE T1087)
+# Énumération Active Directory — MITRE T1087
 enum4linux -a 192.168.152.131
-
-# Test 4 — Scan vulnérabilités (OpenVAS)
-# Via interface web : https://<IP>:9392
 ```
 
-**Résultat : 4/4 attaques détectées ✅**
+Les résultats sont analysés dans Wazuh, Suricata, TheHive, Cortex, MISP et Shuffle afin de vérifier la détection, la corrélation, l’enrichissement et la réponse aux incidents.
+
+---
+
+## 📊 Résultats
+
+Les résultats chiffrés, les captures d’écran et les preuves de fonctionnement sont documentés dans le rapport de projet, notamment :
+
+* agents Windows actifs dans Wazuh ;
+* alertes Suricata transmises à Wazuh via Tenzir ;
+* alertes Wazuh créées dans TheHive ;
+* enrichissement des observables via Cortex ;
+* feeds MISP activés ;
+* workflows Shuffle exécutés ;
+* scans Greenbone/OpenVAS réalisés sur les serveurs Windows.
+
+---
+
+## 📁 Structure du dépôt
+
+```text
+SOC_Lionel_EDV/
+├── deploy_soc.sh
+├── README.md
+└── docs/
+    ├── architecture.md
+    └── tests.md
+```
 
 ---
 
 ## 👤 Auteur
 
-**NADZIGA Franck Lionel Elvis Kiswendsida**  
-Ingénieur de Conception — Génie des Systèmes Numériques  
+**NADZIGA Franck Lionel Elvis Kiswendsida**
+Ingénieur de Conception — Génie des Systèmes Numériques
 ISGE-BF | Année universitaire 2025–2026
-
 
 ---
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT — voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est distribué sous licence MIT.
 
 ---
 
 <div align="center">
 
-*"Un SOC n'est plus un luxe — c'est une nécessité."*
-
-⭐ **N'oubliez pas de star le repo si ce projet vous a été utile !**
+*"Un SOC n’est plus un luxe — c’est une nécessité."*
 
 </div>
