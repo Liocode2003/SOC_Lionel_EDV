@@ -1,21 +1,22 @@
-POINT D’ENTRÉE UNIQUE POUR LE DÉPÔT GITHUB
+CE PAQUET REMPLACE LE MIROIR : INSTALLATION NEUVE SANS ANCIENNE VM
 
-Ajouter le contenu du dossier à la racine du dépôt SOC_Lionel_EDV.
-Remplacer les anciens README.md et deploy_soc.sh par les versions fournies.
-Conserver miroir_soc.py, exporter_soc.sh, installer_soc.sh, VALIDATION.md et tests/.
-Ne jamais ajouter de sauvegarde privée au dépôt.
+1. Ajouter tous les fichiers de ce dossier à la racine de SOC_Lionel_EDV.
+   Remplacer deploy_soc.sh et README.md. Ajouter autonome.py, infrastructure.py,
+   provision.py, transfert.py, agent_windows.ps1, templates/, tests/ et .gitignore.
+2. Sur une VM Ubuntu 24.04 x86_64 neuve, suffisamment dimensionnée :
 
-Puis, sur la VM :
+   git clone https://github.com/Liocode2003/SOC_Lionel_EDV.git
+   cd SOC_Lionel_EDV
+   sudo bash deploy_soc.sh
 
-git clone https://github.com/Liocode2003/SOC_Lionel_EDV.git
-cd SOC_Lionel_EDV
-sudo bash deploy_soc.sh
+3. Répondre aux questions initiales (IP, interface, clés API, SMTP et cibles).
+4. Le programme déroule les installations et les initialisations.
+5. Consulter son résultat. Un échec arrête la chaîne sans déclarer un succès.
+   Après diagnostic : sudo bash deploy_soc.sh --reprendre
 
-Choix 1 sur la source : export privé à froid (arrêt temporaire des services).
-Transférer le dossier de sauvegarde en privé sur la destination.
-Choix 2 sur la cible : installation et restauration avec la configuration copiée.
-La destination doit être neuve et isolée. Les IP de la source sont conservées.
-La copie reste arrêtée jusqu’à validation ; consulter VALIDATION.md.
+Ne jamais publier /opt/soc/autonome : ce dossier contient les secrets générés.
+Le script n'a pas encore été exécuté sur une VM neuve pendant sa préparation.
+Onze tests hors ligne passent. La première installation réelle reste à valider.
 
-État de préparation : tests hors ligne seulement. Essayer d’abord sur une copie
-jetable de la VM. Aucun export/restauration réel n’a été effectué ici.
+Les serveurs Windows/Odoo restent à raccorder ; lire README.md.
+Le test de mail attend ensuite une vraie décision humaine.

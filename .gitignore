@@ -1,16 +1,11 @@
-# Ne jamais versionner les sauvegardes privées.
-*.tar
-*.tar.gz
-*.tgz
-*.zip
-.env
-.env.*
-!.env.example
-*manifest.json
-snapshot*/
-sauvegarde*/
-export*/
-*.pem
-*.key
 __pycache__/
 *.pyc
+.env
+.env.*
+*prive*.json
+*prive*.log
+*.pem
+*.key
+*.tar
+*.tar.gz
+*.zip
