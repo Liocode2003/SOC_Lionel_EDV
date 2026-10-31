@@ -1,0 +1,21 @@
+POINT D’ENTRÉE UNIQUE POUR LE DÉPÔT GITHUB
+
+Ajouter le contenu du dossier à la racine du dépôt SOC_Lionel_EDV.
+Remplacer les anciens README.md et deploy_soc.sh par les versions fournies.
+Conserver miroir_soc.py, exporter_soc.sh, installer_soc.sh, VALIDATION.md et tests/.
+Ne jamais ajouter de sauvegarde privée au dépôt.
+
+Puis, sur la VM :
+
+git clone https://github.com/Liocode2003/SOC_Lionel_EDV.git
+cd SOC_Lionel_EDV
+sudo bash deploy_soc.sh
+
+Choix 1 sur la source : export privé à froid (arrêt temporaire des services).
+Transférer le dossier de sauvegarde en privé sur la destination.
+Choix 2 sur la cible : installation et restauration avec la configuration copiée.
+La destination doit être neuve et isolée. Les IP de la source sont conservées.
+La copie reste arrêtée jusqu’à validation ; consulter VALIDATION.md.
+
+État de préparation : tests hors ligne seulement. Essayer d’abord sur une copie
+jetable de la VM. Aucun export/restauration réel n’a été effectué ici.
